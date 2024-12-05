@@ -65,5 +65,44 @@ describe('Gilded Rose', () => {
   
   });
 
+  describe('Backstage Passes', () => {
+  
+    it('should increase by one in quality when greater than 10 days from sell by date', () => {
+      const gildedRose = new GildedRose([new Item('Backstage passes to a TAFKAL80ETC concert', 15, 10)]);
+      const items = gildedRose.updateQuality();
+      const firstItem = items[0];
+      expect(firstItem.quality).toBe(11);
+    });
+
+    it('should increase by two in quality when between 10 and 6 days from sell by date', () => {
+      const gildedRose = new GildedRose([new Item('Backstage passes to a TAFKAL80ETC concert', 10, 10)]);
+      const items = gildedRose.updateQuality();
+      const firstItem = items[0];
+      expect(firstItem.quality).toBe(12);
+    });
+
+    it('should increase by three in quality when less than 6 days from sell by date', () => {
+      const gildedRose = new GildedRose([new Item('Backstage passes to a TAFKAL80ETC concert', 5, 10)]);
+      const items = gildedRose.updateQuality();
+      const firstItem = items[0];
+      expect(firstItem.quality).toBe(13);
+    });
+
+    it('should reduce quality to zero after the sell by date', () => {
+      const gildedRose = new GildedRose([new Item('Backstage passes to a TAFKAL80ETC concert', 0, 10)]);
+      const items = gildedRose.updateQuality();
+      const firstItem = items[0];
+      expect(firstItem.quality).toBe(0);
+    });
+  
+    it('should not increase beyond 50 in quality', () => {
+      const gildedRose = new GildedRose([new Item('Backstage passes to a TAFKAL80ETC concert', 5, 48)]);
+      const items = gildedRose.updateQuality();
+      const firstItem = items[0];
+      expect(firstItem.quality).toBe(50);
+    });
+
+  });
+
 });
 
