@@ -104,5 +104,23 @@ describe('Gilded Rose', () => {
 
   });
 
+  describe('Sulfuras, Hand of Ragnaros', () => {
+  
+    it('should not decrease in value', () => {
+      const gildedRose = new GildedRose([new Item('Sulfuras, Hand of Ragnaros', 0, 10)]);
+      const items = gildedRose.updateQuality();
+      const firstItem = items[0];
+      expect(firstItem.quality).toBe(10);
+    });
+
+    it('should not change its sell by date', () => {
+      const gildedRose = new GildedRose([new Item('Sulfuras, Hand of Ragnaros', 0, 10)]);
+      const items = gildedRose.updateQuality();
+      const firstItem = items[0];
+      expect(firstItem.sellIn).toBe(0);
+    });
+  
+  });
+
 });
 
