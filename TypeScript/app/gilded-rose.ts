@@ -40,6 +40,12 @@ class AgedBrieUpdater implements ItemUpdater {
   }
 }
 
+class SulfurasUpdater implements ItemUpdater {
+  update(item: Item): void {
+    // Sulfuras, being a legendary item, never changes!
+  }
+}
+
 export class GildedRose {
   items: Array<Item>;
 
