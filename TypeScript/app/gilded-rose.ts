@@ -3,7 +3,7 @@ export class Item {
   sellIn: number;
   quality: number;
 
-  constructor(name, sellIn, quality) {
+  constructor(name: string, sellIn: number, quality: number) {
     this.name = name;
     this.sellIn = sellIn;
     this.quality = quality;
@@ -53,9 +53,9 @@ class BackstagePassUpdater implements ItemUpdater {
     item.sellIn -= 1;
     if (item.sellIn < 0) {
       item.quality = 0;
-    } else if (item.sellIn <= 5) {
+    } else if (item.sellIn < 5) {
       item.quality += 3;
-    } else if (item.sellIn <= 10) {
+    } else if (item.sellIn < 10) {
       item.quality += 2;
     } else {
       item.quality += 1;
