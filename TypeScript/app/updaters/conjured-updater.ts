@@ -6,9 +6,8 @@ export class ConjuredUpdater implements ItemUpdater {
   update(item: Item): void {
     item.sellIn -= 1;
     // Item quality decreases twice as fast as normal
-    item.quality -= 2;
-    if (item.quality < Config.MINIMUM_QUALITY) {
-      item.quality = Config.MINIMUM_QUALITY;
-    }
+    const qualityDecrease = 2;
+    // Set to new quality or minimum, whichever is greater
+    item.quality = Math.max(item.quality - qualityDecrease, Config.MINIMUM_QUALITY);
   }
 }

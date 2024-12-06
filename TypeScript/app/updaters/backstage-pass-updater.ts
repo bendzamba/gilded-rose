@@ -5,18 +5,17 @@ import Config from "@/config/config";
 export class BackstagePassUpdater implements ItemUpdater {
   update(item: Item): void {
     item.sellIn -= 1;
+    let qualityIncrease: number;
     if (item.sellIn < 0) {
-      item.quality = Config.MINIMUM_QUALITY;
+      qualityIncrease = -item.quality;
     } else if (item.sellIn < 5) {
-      item.quality += 3;
+      qualityIncrease = 3;
     } else if (item.sellIn < 10) {
-      item.quality += 2;
+      qualityIncrease = 2;
     } else {
-      item.quality += 1;
+      qualityIncrease = 1;
     }
-    // Catch the scenario where we increased above the maximum
-    if (item.quality > Config.MAXIMUM_QUALITY) {
-      item.quality = Config.MAXIMUM_QUALITY;
-    }
+    // Set to new quality or maximum, whichever is less
+    item.quality = Math.min(item.quality + qualityIncrease, Config.MAXIMUM_QUALITY);
   }
 }

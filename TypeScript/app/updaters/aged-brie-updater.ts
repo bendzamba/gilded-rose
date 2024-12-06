@@ -6,10 +6,8 @@ export class AgedBrieUpdater implements ItemUpdater {
   update(item: Item): void {
     item.sellIn -= 1;
     // Item quality increases with age, doubly so once our sell by date has passed
-    if (item.quality < Config.MAXIMUM_QUALITY) {
-      item.quality += item.sellIn < 0 ? 2 : 1;
-    }
-    // Catch the scenario where we increased above the maximum
-    if (item.quality > Config.MAXIMUM_QUALITY) item.quality = Config.MAXIMUM_QUALITY;
+    const qualityIncrease: number = item.sellIn < 0 ? 2 : 1;
+    // Set to new quality or maximum, whichever is less
+    item.quality = Math.min(item.quality + qualityIncrease, Config.MAXIMUM_QUALITY);
   }
 }
