@@ -2,7 +2,64 @@ import { Item, GildedRose } from '@/gilded-rose';
 
 describe('Gilded Rose', () => {
 
-  describe('Normal Item', () => {
+  describe('Sell In Date', () => {
+    it.each([
+      ['Normal Item', 10, 20, 9],
+      ['Normal Item', 0, 20, -1],
+      ['Sulfuras, Hand of Ragnaros', 10, 80, 10],
+    ])(
+      'Should update the sellIn date for "%s" to %i',
+      (name: string, sellIn: number, quality: number, expectedSellIn: number) => {
+        const items = [new Item(name, sellIn, quality)];
+        const gildedRose = new GildedRose(items);
+
+        gildedRose.updateQuality();
+
+        expect(items[0].sellIn).toBe(expectedSellIn)
+      }
+    )
+  });
+
+  describe('Quality', () => {
+    it.each([
+      ['Normal Item', 1, 1, 0],
+      ['Normal Item', 0, 20, 18],
+      ['Normal Item', 0, 2, 0],
+      ['Normal Item', 1, 0, 0],
+      ['Sulfuras, Hand of Ragnaros', 10, 80, 80],
+      ['Aged Brie', 1, 10, 11],
+      ['Aged Brie', 1, 49, 50],
+      ['Aged Brie', 1, 50, 50],
+      ['Aged Brie', 0, 10, 12],
+      ['Aged Brie', 0, 48, 50],
+      ['Aged Brie', 0, 49, 50],
+      ['Aged Brie', 0, 50, 50],
+      ['Backstage passes to a TAFKAL80ETC concert', 15, 10, 11],
+      ['Backstage passes to a TAFKAL80ETC concert', 11, 10, 11],
+      ['Backstage passes to a TAFKAL80ETC concert', 10, 10, 12],
+      ['Backstage passes to a TAFKAL80ETC concert', 6, 10, 12],
+      ['Backstage passes to a TAFKAL80ETC concert', 5, 10, 13],
+      ['Backstage passes to a TAFKAL80ETC concert', 0, 10, 0],
+      ['Backstage passes to a TAFKAL80ETC concert', 5, 48, 50],
+      ['Backstage passes to a TAFKAL80ETC concert', 10, 49, 50],
+      ['Backstage passes to a TAFKAL80ETC concert', 12, 50, 50],
+      ['Conjured', 10, 10, 8],
+      ['Conjured', 10, 1, 0],
+      ['Conjured', 10, 0, 0],
+    ])(
+      'Should update the sellIn date for "%s" to %i',
+      (name: string, sellIn: number, quality: number, expectedQuality: number) => {
+        const items = [new Item(name, sellIn, quality)];
+        const gildedRose = new GildedRose(items);
+
+        gildedRose.updateQuality();
+
+        expect(items[0].quality).toBe(expectedQuality)
+      }
+    )
+  });
+
+  describe('Name', () => {
 
     it('should retain the name given to it', () => {
       const gildedRose = new GildedRose([new Item('foo', 0, 0)]);
@@ -10,134 +67,7 @@ describe('Gilded Rose', () => {
       const firstItem = items[0];
       expect(firstItem.name).toBe('foo');
     });
-  
-    it('should decrease the sell by date by one', () => {
-      const gildedRose = new GildedRose([new Item('foo', 0, 0)]);
-      const items = gildedRose.updateQuality();
-      const firstItem = items[0];
-      expect(firstItem.sellIn).toBe(-1);
-    });
-  
-    it('should not degrade below zero', () => {
-      const gildedRose = new GildedRose([new Item('foo', 0, 0)]);
-      const items = gildedRose.updateQuality();
-      const firstItem = items[0];
-      expect(firstItem.quality).toBe(0);
-    });
-  
-    it('should degrade by one in quality', () => {
-      const gildedRose = new GildedRose([new Item('foo', 5, 10)]);
-      const items = gildedRose.updateQuality();
-      const firstItem = items[0];
-      expect(firstItem.quality).toBe(9);
-    });
-  
-    it('should degrade by two in quality once sell by date has passed', () => {
-      const gildedRose = new GildedRose([new Item('foo', 0, 20)]);
-      const items = gildedRose.updateQuality();
-      const firstItem = items[0];
-      expect(firstItem.quality).toBe(18);
-    });
-  });
 
-  describe('Aged Brie', () => {
-  
-    it('should increase by one in quality before sell by date', () => {
-      const gildedRose = new GildedRose([new Item('Aged Brie', 1, 10)]);
-      const items = gildedRose.updateQuality();
-      const firstItem = items[0];
-      expect(firstItem.quality).toBe(11);
-    });
-
-    it('should increase by two in quality after sell by date', () => {
-      const gildedRose = new GildedRose([new Item('Aged Brie', 0, 10)]);
-      const items = gildedRose.updateQuality();
-      const firstItem = items[0];
-      expect(firstItem.quality).toBe(12);
-    });
-
-    it('should not increase beyond 50 in quality', () => {
-      const gildedRose = new GildedRose([new Item('Aged Brie', 0, 50)]);
-      const items = gildedRose.updateQuality();
-      const firstItem = items[0];
-      expect(firstItem.quality).toBe(50);
-    });
-  
-  });
-
-  describe('Backstage Passes', () => {
-  
-    it('should increase by one in quality when greater than 10 days from sell by date', () => {
-      const gildedRose = new GildedRose([new Item('Backstage passes to a TAFKAL80ETC concert', 15, 10)]);
-      const items = gildedRose.updateQuality();
-      const firstItem = items[0];
-      expect(firstItem.quality).toBe(11);
-    });
-
-    it('should increase by two in quality when between 10 and 6 days from sell by date', () => {
-      const gildedRose = new GildedRose([new Item('Backstage passes to a TAFKAL80ETC concert', 10, 10)]);
-      const items = gildedRose.updateQuality();
-      const firstItem = items[0];
-      expect(firstItem.quality).toBe(12);
-    });
-
-    it('should increase by three in quality when less than 6 days from sell by date', () => {
-      const gildedRose = new GildedRose([new Item('Backstage passes to a TAFKAL80ETC concert', 5, 10)]);
-      const items = gildedRose.updateQuality();
-      const firstItem = items[0];
-      expect(firstItem.quality).toBe(13);
-    });
-
-    it('should reduce quality to zero after the sell by date', () => {
-      const gildedRose = new GildedRose([new Item('Backstage passes to a TAFKAL80ETC concert', 0, 10)]);
-      const items = gildedRose.updateQuality();
-      const firstItem = items[0];
-      expect(firstItem.quality).toBe(0);
-    });
-  
-    it('should not increase beyond 50 in quality', () => {
-      const gildedRose = new GildedRose([new Item('Backstage passes to a TAFKAL80ETC concert', 5, 48)]);
-      const items = gildedRose.updateQuality();
-      const firstItem = items[0];
-      expect(firstItem.quality).toBe(50);
-    });
-
-  });
-
-  describe('Sulfuras, Hand of Ragnaros', () => {
-  
-    it('should not decrease in value', () => {
-      const gildedRose = new GildedRose([new Item('Sulfuras, Hand of Ragnaros', 0, 80)]);
-      const items = gildedRose.updateQuality();
-      const firstItem = items[0];
-      expect(firstItem.quality).toBe(80);
-    });
-
-    it('should not change its sell by date', () => {
-      const gildedRose = new GildedRose([new Item('Sulfuras, Hand of Ragnaros', 0, 80)]);
-      const items = gildedRose.updateQuality();
-      const firstItem = items[0];
-      expect(firstItem.sellIn).toBe(0);
-    });
-  
-  });
-
-  describe('Conjured', () => {
-  
-    it('should decrease quality by two', () => {
-      const gildedRose = new GildedRose([new Item('Conjured', 10, 10)]);
-      const items = gildedRose.updateQuality();
-      const firstItem = items[0];
-      expect(firstItem.quality).toBe(8);
-    });
-
-    it('should not decrease quality below zero', () => {
-      const gildedRose = new GildedRose([new Item('Conjured', 10, 1)]);
-      const items = gildedRose.updateQuality();
-      const firstItem = items[0];
-      expect(firstItem.quality).toBe(0);
-    });
-  
   });
 
 });
