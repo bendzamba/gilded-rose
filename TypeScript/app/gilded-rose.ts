@@ -1,82 +1,11 @@
-export class Item {
-  name: string;
-  sellIn: number;
-  quality: number;
+import { Item } from "./models/item";
+import { ItemUpdater } from "./models/item-updater";
+import { AgedBrieUpdater } from "./updaters/aged-brie-updater";
+import { BackstagePassUpdater } from "./updaters/backstage-pass-updater";
+import { ConjuredUpdater } from "./updaters/conjured-updater";
+import { DefaultItemUpdater } from "./updaters/default-updater";
+import { SulfurasUpdater } from "./updaters/sulfuras-updater";
 
-  constructor(name: string, sellIn: number, quality: number) {
-    this.name = name;
-    this.sellIn = sellIn;
-    this.quality = quality;
-  }
-}
-
-// Define an interface for updating items
-interface ItemUpdater {
-  update(item: Item): void;
-}
-
-// Default Item Updater
-class DefaultItemUpdater implements ItemUpdater {
-  update(item: Item): void {
-    // Our sellIn day decreases by one
-    item.sellIn -= 1;
-    // If the item quality is zero, it will not decrease
-    if (item.quality > 0) {
-      item.quality -= item.sellIn < 0 ? 2 : 1;
-    }
-    // Catch the scenario where we reduced by two, from one, and now have a negative quality
-    if (item.quality < 0) item.quality = 0;
-  }
-}
-
-class AgedBrieUpdater implements ItemUpdater {
-  update(item: Item): void {
-    item.sellIn -= 1;
-    // Item quality increases with age, doubly so once our sell by date has passed
-    // It maxes out at 50
-    if (item.quality < 50) {
-      item.quality += item.sellIn < 0 ? 2 : 1;
-    }
-    // Catch the scenario where we increased above 50
-    if (item.quality > 50) item.quality = 50;
-  }
-}
-
-class SulfurasUpdater implements ItemUpdater {
-  update(item: Item): void {
-    // Sulfuras, being a legendary item, never changes!
-  }
-}
-
-class BackstagePassUpdater implements ItemUpdater {
-  update(item: Item): void {
-    item.sellIn -= 1;
-    if (item.sellIn < 0) {
-      item.quality = 0;
-    } else if (item.sellIn < 5) {
-      item.quality += 3;
-    } else if (item.sellIn < 10) {
-      item.quality += 2;
-    } else {
-      item.quality += 1;
-    }
-    // Catch the scenario where we increased above 50
-    if (item.quality > 50) {
-      item.quality = 50;
-    }
-  }
-}
-
-class ConjuredUpdater implements ItemUpdater {
-  update(item: Item): void {
-    item.sellIn -= 1;
-    // Item quality decreases twice as fast as normal
-    item.quality -= 2;
-    if (item.quality < 0) {
-      item.quality = 0;
-    }
-  }
-}
 
 export class GildedRose {
   items: Array<Item>;
