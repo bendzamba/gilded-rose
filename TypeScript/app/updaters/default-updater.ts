@@ -1,6 +1,6 @@
-import { Item } from "@/models/item";
-import { ItemUpdater } from "@/models/item-updater";
-import Config from "@/config/config";
+import { Item } from "../models/item";
+import { ItemUpdater } from "../models/item-updater";
+import Config from "../config/config";
 
 // Default Item 
 export class DefaultItemUpdater implements ItemUpdater {

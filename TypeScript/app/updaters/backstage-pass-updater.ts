@@ -1,6 +1,6 @@
-import { Item } from "@/models/item";
-import { ItemUpdater } from "@/models/item-updater";
-import Config from "@/config/config";
+import { Item } from "../models/item";
+import { ItemUpdater } from "../models/item-updater";
+import Config from "../config/config";
 
 export class BackstagePassUpdater implements ItemUpdater {
   update(item: Item): void {

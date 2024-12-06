@@ -1,10 +1,10 @@
-import { Item } from "@/models/item";
-import { ItemUpdater } from "@/models/item-updater";
-import { AgedBrieUpdater } from "@/updaters/aged-brie-updater";
-import { BackstagePassUpdater } from "@/updaters/backstage-pass-updater";
-import { ConjuredUpdater } from "@/updaters/conjured-updater";
-import { DefaultItemUpdater } from "@/updaters/default-updater";
-import { SulfurasUpdater } from "@/updaters/sulfuras-updater";
+import { Item } from "./models/item";
+import { ItemUpdater } from "./models/item-updater";
+import { AgedBrieUpdater } from "./updaters/aged-brie-updater";
+import { BackstagePassUpdater } from "./updaters/backstage-pass-updater";
+import { ConjuredUpdater } from "./updaters/conjured-updater";
+import { DefaultItemUpdater } from "./updaters/default-updater";
+import { SulfurasUpdater } from "./updaters/sulfuras-updater";
 
 
 export class GildedRose {
