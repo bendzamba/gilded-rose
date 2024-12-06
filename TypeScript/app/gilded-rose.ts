@@ -67,6 +67,17 @@ class BackstagePassUpdater implements ItemUpdater {
   }
 }
 
+class ConjuredUpdater implements ItemUpdater {
+  update(item: Item): void {
+    item.sellIn -= 1;
+    // Item quality decreases twice as fast as normal
+    item.quality -= 2;
+    if (item.quality < 0) {
+      item.quality = 0;
+    }
+  }
+}
+
 export class GildedRose {
   items: Array<Item>;
 
@@ -74,6 +85,7 @@ export class GildedRose {
     "Aged Brie": new AgedBrieUpdater(),
     "Sulfuras, Hand of Ragnaros": new SulfurasUpdater(),
     "Backstage passes to a TAFKAL80ETC concert": new BackstagePassUpdater(),
+    "Conjured": new ConjuredUpdater(),
   };
 
   constructor(items = [] as Array<Item>) {

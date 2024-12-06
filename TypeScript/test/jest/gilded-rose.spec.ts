@@ -122,5 +122,23 @@ describe('Gilded Rose', () => {
   
   });
 
+  describe('Conjured', () => {
+  
+    it('should decrease quality by two', () => {
+      const gildedRose = new GildedRose([new Item('Conjured', 10, 10)]);
+      const items = gildedRose.updateQuality();
+      const firstItem = items[0];
+      expect(firstItem.quality).toBe(8);
+    });
+
+    it('should not decrease quality below zero', () => {
+      const gildedRose = new GildedRose([new Item('Conjured', 10, 1)]);
+      const items = gildedRose.updateQuality();
+      const firstItem = items[0];
+      expect(firstItem.quality).toBe(0);
+    });
+  
+  });
+
 });
 
