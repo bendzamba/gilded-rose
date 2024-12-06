@@ -50,7 +50,7 @@ describe('Gilded Rose', () => {
       ['Conjured Corn Cake', 10, 1, 0], // should not decrease below minimum
       ['Conjured Carrot Cake', 10, 0, 0], // should not decrease below minimum
     ])(
-      'Should update the sellIn date for "%s" to %i',
+      'Should update the quality for "%s" to %i',
       (name: string, sellIn: number, quality: number, expectedQuality: number) => {
         const items = [new Item(name, sellIn, quality)];
         const gildedRose = new GildedRose(items);
