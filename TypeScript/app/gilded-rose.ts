@@ -12,8 +12,8 @@ export class GildedRose {
 
   private updaters: { [key: string]: ItemUpdater } = {
     "Aged Brie": new AgedBrieUpdater(),
-    "Sulfuras, Hand of Ragnaros": new SulfurasUpdater(),
-    "Backstage passes to a TAFKAL80ETC concert": new BackstagePassUpdater(),
+    "Sulfuras": new SulfurasUpdater(),
+    "Backstage passes": new BackstagePassUpdater(),
     "Conjured": new ConjuredUpdater(),
   };
 
@@ -24,7 +24,17 @@ export class GildedRose {
   updateQuality() {
 
     for (const item of this.items) {
-      const updater = this.updaters[item.name] || new DefaultItemUpdater();
+      // Check for an updater by the prefix of the item's name
+      const updaterName: string | undefined = Object.keys(this.updaters).find(key => item.name.startsWith(key));
+      let updater: ItemUpdater;
+
+      if (updaterName) {
+        // Call the corresponding updater function
+        updater = this.updaters[updaterName];
+      } else {
+        // Default updater for items that don't match any category
+        updater = new DefaultItemUpdater();
+      }
       updater.update(item);
     }
     return this.items;
